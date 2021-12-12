@@ -1,0 +1,66 @@
+version: '3.8'
+services:
+  elasticsearch:
+    build:
+      context: elasticsearch/
+      args:
+        ELK_VERSION: $ELK_VERSION
+    volumes:
+      - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro,z
+      - elasticsearch:/usr/share/elasticsearch/data:z
+    ports:
+      - 9200:9200
+      - 9300:9300
+    environment:
+      node.name: node01
+      cluster.name: es-cluster
+      discovery.type: single-node
+      ES_JAVA_OPTS: "-Xms256m -Xmx256m"
+      ELASTIC_USERNAME: $ELASTIC_USERNAME
+      ELASTIC_PASSWORD: $ELASTIC_PASSWORD
+    networks:
+      - elastic
+
+  kibana:
+    build:
+      context: kibana/
+      args:
+        ELK_VERSION: $ELK_VERSION
+    volumes:
+      - ./kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml:ro,z
+    ports:
+      - 5601:5601
+    environment:
+      ELASTIC_USERNAME: $ELASTIC_USERNAME
+      ELASTIC_PASSWORD: $ELASTIC_PASSWORD
+    networks:
+      - elastic
+    depends_on:
+      - elasticsearch
+
+  logstash:
+    build:
+      context: logstash/
+      args:
+        ELK_VERSION: $ELK_VERSION
+    volumes:
+      - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro,z
+      - ./logstash/pipeline:/usr/share/logstash/pipeline:ro,z
+    ports:
+      - 5044:5044
+      - 9600:9600
+    environment:
+      ELASTIC_USERNAME: $ELASTIC_USERNAME
+      ELASTIC_PASSWORD: $ELASTIC_PASSWORD
+      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+    networks:
+      - elastic
+    depends_on:
+      - elasticsearch
+
+networks:
+  elastic:
+    driver: bridge
+
+volumes:
+  elasticsearch:

@@ -1,0 +1,13 @@
+# -- Gitignore Files -- #
+
+# Env Value File
+.env*
+!.env.example
+
+
+# Editor Setting Files (Pycharm, VSCode ...)
+.idea/
+.vscode/
+
+# MacOS System Files
+.DS_Store
