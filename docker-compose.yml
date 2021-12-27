@@ -5,6 +5,10 @@ services:
       context: elasticsearch/
       args:
         ELK_VERSION: $ELK_VERSION
+    deploy:
+      resources:
+        limits:
+          memory: 1GB
     volumes:
       - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro,z
       - elasticsearch:/usr/share/elasticsearch/data:z
@@ -26,6 +30,10 @@ services:
       context: kibana/
       args:
         ELK_VERSION: $ELK_VERSION
+    deploy:
+      resources:
+        limits:
+          memory: 1GB
     volumes:
       - ./kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml:ro,z
     ports:
@@ -43,6 +51,10 @@ services:
       context: logstash/
       args:
         ELK_VERSION: $ELK_VERSION
+    deploy:
+      resources:
+        limits:
+          memory: 1GB
     volumes:
       - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro,z
       - ./logstash/pipeline:/usr/share/logstash/pipeline:ro,z
