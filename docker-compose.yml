@@ -19,7 +19,7 @@ services:
       node.name: node01
       cluster.name: es-cluster
       discovery.type: single-node
-      ES_JAVA_OPTS: "-Xms256m -Xmx256m"
+      ES_JAVA_OPTS: "-Xms512m -Xmx512m"
       ELASTIC_USERNAME: $ELASTIC_USERNAME
       ELASTIC_PASSWORD: $ELASTIC_PASSWORD
     networks:
@@ -64,7 +64,7 @@ services:
     environment:
       ELASTIC_USERNAME: $ELASTIC_USERNAME
       ELASTIC_PASSWORD: $ELASTIC_PASSWORD
-      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+      LS_JAVA_OPTS: "-Xmx512m -Xms512m"
     networks:
       - elastic
     depends_on:
